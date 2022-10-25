@@ -94,6 +94,7 @@ df.createOrReplaceTempView("data")
 spark.sql("select * from data limit 3").show()
 spark.sql("select * from data where event_type='cart' limit 3").show()
 
+
 ----------- - RDD -----------------
 dataset distribuidos
 
