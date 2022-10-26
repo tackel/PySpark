@@ -101,12 +101,13 @@ dataset distribuidos
 arrancar un claster: en este modo tenemos el master y el slave o worker en la misma maquina para arrancar con
  el tema
 vas a la carpeta de spark y a bin
-en mi caso: cd /opt/spark/spark-3.3.0-bin-hadoop/sbin
+en mi caso: cd /opt/spark/spark-3.3.0-bin-hadoop3/sbin
 
 luego: ./start-master.sh
 #### en el localhost:8080 se puede acceder a un dashboar donde nos da los datos del master 
 iniciamos un worker que es igual que un slave que hicimos anterirmente:
-y le pasamos lso datos de dodne esta el worker que aparece en el dashboar donde entramos en el localhost anterior
+y le pasamos lso datos de dodne esta el worker que aparece en el dashboar donde entramos en el localhost 
+anterior
 
 ./start-worker.sh spark://tackel-300E4A-300E5A-300E7A:7077
 
@@ -155,6 +156,9 @@ cat nombreDelArchivo
 
 # los metodos mas usados son: map, flapMap, filter, reduceByKey
 
+
+
+
 # ############PARA NO USAR LA CONSOLA, PODEMOS CREAR UNA APLICACION QUE HAGA EL proceso
 #cerramoe primero:
 exit()
@@ -187,12 +191,12 @@ lines.saveAsTextFile(sys.argv[2])
 
 ./spark-submit --master acaElMasterDelDarhboard NombreAplicacion dataSetEntrada dataSetSalida
 # en mi ejemplo seria asi:
-./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 app1.py "/home/tackel/Documentos/Programacion/PySpark/dataSet/*.csv" "/home/tackel/Documentos/Programacion/PySpark/resultConRDD"
+./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 app_1.py "/home/tackel/Documentos/Programacion/PySpark/dataSet/*.csv" "/home/tackel/Documentos/Programacion/PySpark/resultConRDD"
 
 # puede dar error por falta de memori, se le puede poner, si es que tengo, asi:
 # o por que ya existe el archivo de salida, eliminarlo
 rm -R ../../resultConRDD/ # esto funciona para su ejemplo
-./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 --config spark.executor.memory=4g --config spark.driver.memory=4g "/home/tackel/Documentos/Programacion/PySpark/dataSet/*.csv" "/home/tackel/Documentos/Programacion/PySpark/resultConRDD"
+./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 --config spark.executor.memory=4g --config spark.driver.memory=4g app_1.py "/home/tackel/Documentos/Programacion/PySpark/dataSet/*.csv" "/home/tackel/Documentos/Programacion/PySpark/resultConRDD"
 
 
 #si todo va bien, entras al dashboar y deberia estar ahi el proceso. Y ya deberia estar generado el archvo en la carpeta de salida seleccionada
@@ -206,8 +210,6 @@ import sys
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("app1").getOrCreate()
-
-df = spark.read.options(header='True', inferSchema='True').csv(sys.argv[1])
 
 #Broadcast
 BroadcastVar = spark.sparkContext.Broadcast([1,2,3])

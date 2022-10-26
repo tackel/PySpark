@@ -1,12 +1,10 @@
 import sys
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("app1").getOrCreate()
-
-df = spark.read.options(header='True', inferSchema='True').csv(sys.argv[1])
+spark = SparkSession.builder.appName("app2").getOrCreate()
 
 #Broadcast
-BroadcastVar = spark.sparkContext.Broadcast([1,2,3])
+BroadcastVar = spark.sparkContext.broadcast([1,2,3])
 print("")
 print(BroadcastVar.value)
 print("")
@@ -17,6 +15,7 @@ sumatorioError = 0
 
 def myfunc(x):
     global sumatorioError
+    accum.add(x)
     sumatorioError += x
 
 rdd = spark.sparkContext.parallelize([1,2,3,4,5])

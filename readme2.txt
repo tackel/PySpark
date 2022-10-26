@@ -18,4 +18,4 @@ hola mundo
  
 
 # ejecutamos la app1
-./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 ds.py 
+./spark-submit --master spark://tackel-300E4A-300E5A-300E7A:7077 /home/tackel/Documentos/Programacion/PySpark/ds.py 
