@@ -1,0 +1,52 @@
+1. Crear tres contenedores, tres maquinas donde intalar apache spark
+
+sudo docker run -it --rm --memory 2Gb --cpus 1 ubuntu
+# -it habilitar modo iteractivo
+# --rm es para borrar el contenedor cuando lo pare, puede no ponerse igual
+# asigna memori maxima
+# el tema de la cpu puede no funcionar por que noe sta funcionando el cgroup, no seria un problema
+
+Instalar las dependecias:
+# Se deshabilita el modo interactivo para que no pregunte cosas
+
+export DEBIAN_FRONTEND=noninteractive
+
+# instalar las dependencias
+apt update && apt install -y openjdk-8-jdk python nano
+
+# hacer lo mismo con las otras maquinas, dos mas
+sudo docker run -it --rm --memory 2Gb --cpus 1 ubuntu
+export DEBIAN_FRONTEND=noninteractive
+apt update && apt install -y openjdk-8-jdk python nano
+
+#### luego copiar apache spark en la maquina y los datos
+# para copiar los datos usa un dataset msa pequeño de unos 100 mb
+
+sudo docker cp spark-3.3.0-bin-hadoop3 <ID_CONTENEDOR>:/opt
+sudo docker cp data.csv <ID_CONTENEDOR>:/opt 
+# el id de contenedor lo pone en la solapa de la terminal
+
+#### hacer esto en los 3 contenedores
+# verificar que este todo instalado en todas las maquinas:
+# todas tienen que tener el mismo fichero y en la misma ruta
+cd /opt/
+
+
+# Arrancar máster en la primer maquina
+<SPARK_HOME>/sbin/start-master.sh -h 0.0.0.0 # que escuche aca para no resolver por nombre
+# deberia estar ya funcionando en el localhos:8080
+
+# Arrancar esclavos en la segunda y tercera maquina
+# puede ser start-worker
+<SPARK_HOME>/sbin/start-slave.sh spark://<IP_MASTER>:7077
+
+########### estas tres maquinas ya corriendo seria un cluster
+## lanzar aplicaciones en el:
+# desde carpeta bin
+# si trabajo en el shell de spark o pyspark solo lo hara en local, solo en el master
+
+crear app:
+# la cree en el archivo cluster_app.py
+
+./spark-submit --master spark://172.17.0.3:7077 app.py
+
